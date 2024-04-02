@@ -99,6 +99,7 @@ function unfollowUser(followerId, followingId, callback) {
   );
 }
 
+
 module.exports = {
   createUser,
   authenticateUser,

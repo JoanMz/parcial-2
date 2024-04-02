@@ -71,11 +71,44 @@ router.get("/Test", async (req, res) => {
   res.json(users);
 });
 
-router.post("/Test", async (req,res) => {
+router.post("/Test", async (req, res) => {
   const {username, password, role} = req.body;
   await userModelT.createUser(username, password, role);
   res.json({message:"Created correctly"})
 });
+
+router.post("/Tfollow", async (req, res) => {
+  const {followerId, followingId} = req.body;
+  await userModelT.followUser(followerId, followingId);
+  let username = await userModelT.getUsernameById(followingId);
+  res.json({message:`follow ${username}`});
+});
+
+
+router.delete("/Tunfollow", async (req, res) => {
+  try {
+  const {followerId, followingId} = req.body;
+  await userModelT.unfollowUser(followerId, followingId);
+  }catch (error){
+    console.error("Cant unfollow : ", error);
+    throw error;
+  }
+
+  res.json({succes:true, message: "User Unfollow succesfull"});
+});
+
+router.get("/Tfollowers/:id", async (req, res) =>{
+  const id = req.params.id;
+  const followers = await userModelT.getFollowers(id);
+  //console.log(id)
+  res.json(followers);
+});
+
+router.get("/Tfollowings/:id", async (req, res) => {
+  const id = req.params.id;
+  const following = await userModelT.getFollowings(id);
+  res.json(following);
+})
 
 module.exports = router;
 
