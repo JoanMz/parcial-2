@@ -19,17 +19,17 @@ connection.connect(err => {
 });
 
 // Función para crear un nuevo usuario
-function createUser(username, password, fullName, role, callback) {
+function createUser(username, password,  role, callback) {
   connection.query(
-    'INSERT INTO users (username, password, fullName, role) VALUES (?, ?, ?, ?)',
-    [username, password, fullName, role],
+    'INSERT INTO users (username, password,  role) VALUES (?, ?, ?)',
+    [username, password,  role],
     (err, result) => {
       if (err) {
         console.error('Error creating user:', err);
         callback(err, null);
         return;
       }
-      callback(null, { id: result.insertId, username, fullName, role });
+      callback(null, { id: result.insertId, username,  role });
     }
   );
 }

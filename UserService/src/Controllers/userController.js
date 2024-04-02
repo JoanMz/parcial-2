@@ -4,15 +4,16 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const router = express.Router();
 const userModel = require('../Models/userModel');
+const userModelT = require("../Models/userModelT");
 
 router.use(bodyParser.json());
 
 // Ruta para crear un nuevo usuario
 router.post('/', (req, res) => {
-  const { username, password, fullName, role } = req.body;
-  userModel.createUser(username, password, fullName, role, (err, user) => {
+  const { username, password,  role } = req.body;
+  userModel.createUser(username, password,  role, (err, user) => {
     if (err) {
-      return res.status(500).json({ success: false, message: 'Error creating user' });
+      return res.status(500).json({ success: false, message: 'Error creating user' , error: err});
     }
     res.json({ success: true, user });
   });
@@ -62,6 +63,18 @@ router.delete('/unfollow', (req, res) => {
     }
     res.json({ success: true, message: 'User unfollowed successfully', data: result });
   });
+});
+
+
+router.get("/Test", async (req, res) => {
+  const users = await userModelT.getAllUsers();
+  res.json(users);
+});
+
+router.post("/Test", async (req,res) => {
+  const {username, password, role} = req.body;
+  await userModelT.createUser(username, password, role);
+  res.json({message:"Created correctly"})
 });
 
 module.exports = router;
